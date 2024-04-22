@@ -19,7 +19,7 @@ parser.add_argument("--passa-alta", action="store_true",
 parser.add_argument("--rejeita-faixa", action="store_true",
                     help="Booleano para utilizar filtro rejeita-\
                           faixa.")
-parser.add_argument("--threshold", type=int, required=False,
+parser.add_argument("--limiar", type=int, required=False, default=150,
                     help="Limiar para compressão.")
 
 
@@ -50,6 +50,30 @@ if args.r2 is not None:
 
 print(args)
 
-# img_path = args.image
-# img = cv2.imread(img_path, cv2.IMREAD_GRAYSCALE)
+img_path = args.image
+img = cv2.imread(img_path, cv2.IMREAD_GRAYSCALE)
 
+filtered, mag, core, compressed = apply_freq_filter3(img, args.r1, args.r2,
+                                                    args.passa_alta, args.rejeita_faixa,
+                                                    args.limiar)
+
+filter_type = "passa_alta" if args.passa_alta else "passa_baixa"
+if args.r2 is not None: filter_type = "passa_faixa"
+if args.r2 is not None and args.rejeita_faixa: filter_type = "rejeita_faixa"
+radius = f"r1={args.r1}" if args.r2 is None else f"r1={args.r1}-r2{args.r2}"
+file_path = f"{img_path.split('/')[-1].split('.png')[0]}-{filter_type}-{radius}"
+
+if not os.path.exists("resultados"):
+    os.mkdir("resultados")
+file_path = "resultados/" + file_path
+print(file_path)
+cv2.imwrite(file_path + ".png", filtered)
+cv2.imwrite(file_path + "-espectro.png", mag)
+cv2.imwrite(file_path + "-núcleo.png", core)
+cv2.imwrite(file_path + f"-comprimida-limiar={args.limiar}.png", compressed)
+
+fig, ax = plt.subplots(figsize=(5,3))
+
+hist_orig = ax.hist(img.ravel(), 256, [0,256])
+fig.savefig(f"{img_path.split('.png')[0]}_originalHistogram.png",
+            bbox_inches='tight')
