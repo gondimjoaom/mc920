@@ -19,7 +19,7 @@ parser.add_argument("--passa-alta", action="store_true",
 parser.add_argument("--rejeita-faixa", action="store_true",
                     help="Booleano para utilizar filtro rejeita-\
                           faixa.")
-parser.add_argument("--limiar", type=int, required=False, default=150,
+parser.add_argument("--limiar", type=int, required=False,
                     help="Limiar para compressão.")
 
 
@@ -68,12 +68,13 @@ file_path = "resultados/" + file_path
 cv2.imwrite(file_path + ".png", filtered)
 cv2.imwrite(file_path + "-espectro.png", mag)
 cv2.imwrite(file_path + "-núcleo.png", core)
-cv2.imwrite(file_path + f"-comprimida-limiar={args.limiar}.png", compressed)
+if compressed is not None:
+    cv2.imwrite(file_path + f"-comprimida-limiar={args.limiar}.png", compressed)
 
-fig, ax = plt.subplots(figsize=(5,3))
-hist_orig = ax.hist(img.ravel(), 256, [0,256])
-fig.savefig(f"{file_path}_originalHistogram.png", bbox_inches='tight')
+    fig, ax = plt.subplots(figsize=(5,3))
+    hist_orig = ax.hist(img.ravel(), 256, [0,256])
+    fig.savefig(f"{file_path}_originalHistogram.png", bbox_inches='tight')
 
-fig, ax = plt.subplots(figsize=(5,3))
-hist_orig = ax.hist(compressed.ravel(), 256, [0,256])
-fig.savefig(f"{file_path}_compressedHistogram-threshold={args.limiar}.png", bbox_inches='tight')
+    fig, ax = plt.subplots(figsize=(5,3))
+    hist_orig = ax.hist(compressed.ravel(), 256, [0,256])
+    fig.savefig(f"{file_path}_compressedHistogram-threshold={args.limiar}.png", bbox_inches='tight')

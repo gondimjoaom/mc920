@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 
 def apply_freq_filter(img, r1, r2 = None, high=False,
-                       reject=False, t=60):
+                       reject=False, t=None):
     
     fourier = cv2.dft(np.float32(img),
                       flags=cv2.DFT_COMPLEX_OUTPUT)
@@ -35,13 +35,16 @@ def apply_freq_filter(img, r1, r2 = None, high=False,
     filtered_img = filtered_img*255 / filtered_img.max()
     filtered_img = filtered_img.astype(np.uint8)
 
-    f_orig_shifted = np.fft.fftshift(np.where(magnitude < t, 0,
-                                              f_complex))
-    inv_orig_img = np.fft.ifft2(f_orig_shifted) # inverse F.T.
-    back_img = np.abs(inv_orig_img)
-    back_img -= back_img.min()
-    back_img = back_img*255 / back_img.max()
-    back_img = back_img.astype(np.uint8)
+    if t is not None:
+        f_orig_shifted = np.fft.fftshift(np.where(magnitude < t, 0,
+                                                f_complex))
+        inv_orig_img = np.fft.ifft2(f_orig_shifted) # inverse F.T.
+        back_img = np.abs(inv_orig_img)
+        back_img -= back_img.min()
+        back_img = back_img*255 / back_img.max()
+        back_img = back_img.astype(np.uint8)
+    else:
+        back_img = None
 
     return filtered_img, magnitude, \
             (magnitude * (mask/255)).astype(np.uint8), back_img
