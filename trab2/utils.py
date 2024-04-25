@@ -16,13 +16,12 @@ def apply_freq_filter(img, r1, r2 = None, high=False,
     mask = np.zeros_like(img)
     cy = mask.shape[0] // 2
     cx = mask.shape[1] // 2
-    cv2.circle(mask, (cx,cy), r1, (255,255,255), -1)[0] 
+    cv2.circle(mask, (cx,cy), r1, (255,255,255), -1)[0]
+    if high:
+        mask = np.where(mask == 0, 255, 0) 
     if r2 is not None:        
         cv2.circle(mask, (cx,cy), r2, (255,255,255), -1)[0]
         cv2.circle(mask, (cx,cy), r1, (0,0,0), -1)[0]
-           
-    if high:
-        mask = np.where(mask == 0, 255, 0)
     if reject:
         mask = np.where(mask == 255, 0, 255)
 
