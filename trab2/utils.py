@@ -22,7 +22,7 @@ def apply_freq_filter(img, r1, r2 = None, high=False,
         cv2.circle(mask, (cx,cy), r1, (0,0,0), -1)[0]
            
     if high:
-        mask =  255 - mask
+        mask = np.where(mask == 0, 255, 0)
     if reject:
         mask = np.where(mask == 255, 0, 255)
 
