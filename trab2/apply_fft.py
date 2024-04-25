@@ -6,8 +6,8 @@ from utils import apply_freq_filter
 parser = argparse.ArgumentParser()
 parser.add_argument("--image", help="Caminho para a imagem.")
 parser.add_argument("--r1", type=int,help="Raio r1 para os filtros \
-                    passa-baixa ou passa-alta (para o filtro passa-\
-                    alta, usar também o argumento 'passa-alta').")
+passa-baixa ou passa-alta (para o filtro passa-\
+alta, usar também o argumento 'passa-alta').")
 parser.add_argument("--r2", type=int, required=False,
                     help="Raio r2 para os filtros passa-faixa \
                           ou rejeita-faixa (para o filtro rejeita-\
@@ -33,17 +33,17 @@ apenas o filtro passa-alta OU os filtro passa-faixa e rejeita faixa, o argumento
 if args.passa_alta and args.rejeita_faixa:
     if args.r2 is None:
         print("Ambos os argumentos --passa-alta e --rejeita-faixa foram utilizados, \
-              como o argumento r2 não foi utilizado, o argumento --rejeita-faixa \
-              será configurado para 'False'.")
+como o argumento r2 não foi utilizado, o argumento --rejeita-faixa \
+será configurado para 'False'.")
         args.rejeita_faixa = False
     else:
         print("Ambos os argumentos --passa-alta e --rejeita-faixa foram utilizados, \
-              como o argumento r2 foi utilizado, o argumento --passa-alta \
-              será configurado para 'False'.")
+como o argumento r2 foi utilizado, o argumento --passa-alta \
+será configurado para 'False'.")
         args.passa_alta = False
 if args.rejeita_faixa:
     assert args.rejeita_faixa and args.r2 is not None, "Caso deseje utilizar o filtro rejeita \
-    faixa, o argumento r2 deve ser utilizado."
+faixa, o argumento r2 deve ser utilizado."
 
 if args.r2 is not None:
         assert args.r2 > args.r1, "r2 deve ser maior que r1."
