@@ -1,7 +1,7 @@
 import argparse, cv2, os
 from matplotlib import pyplot as plt
 
-from utils import apply_freq_filter3
+from utils import apply_freq_filter
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--image", help="Caminho para a imagem.")
@@ -47,13 +47,10 @@ faixa, o argumento r2 deve ser utilizado."
 if args.r2 is not None:
         assert args.r2 > args.r1, "r2 deve ser maior que r1."
 
-
-print(args)
-
 img_path = args.image
 img = cv2.imread(img_path, cv2.IMREAD_GRAYSCALE)
 
-filtered, mag, core, compressed = apply_freq_filter3(img, args.r1, args.r2,
+filtered, mag, core, compressed = apply_freq_filter(img, args.r1, args.r2,
                                                     args.passa_alta, args.rejeita_faixa,
                                                     args.limiar)
 
@@ -66,14 +63,16 @@ file_path = f"{img_path.split('/')[-1].split('.png')[0]}-{filter_type}-{radius}"
 if not os.path.exists("resultados"):
     os.mkdir("resultados")
 file_path = "resultados/" + file_path
-print(file_path)
+
 cv2.imwrite(file_path + ".png", filtered)
 cv2.imwrite(file_path + "-espectro.png", mag)
 cv2.imwrite(file_path + "-núcleo.png", core)
 cv2.imwrite(file_path + f"-comprimida-limiar={args.limiar}.png", compressed)
 
 fig, ax = plt.subplots(figsize=(5,3))
-
 hist_orig = ax.hist(img.ravel(), 256, [0,256])
-fig.savefig(f"{img_path.split('.png')[0]}_originalHistogram.png",
-            bbox_inches='tight')
+fig.savefig(f"{file_path}_originalHistogram.png", bbox_inches='tight')
+
+fig, ax = plt.subplots(figsize=(5,3))
+hist_orig = ax.hist(compressed.ravel(), 256, [0,256])
+fig.savefig(f"{file_path}_compressedHistogram-threshold={args.limiar}.png", bbox_inches='tight')

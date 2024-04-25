@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-def apply_freq_filter3(img, r1, r2 = None, high=False,
+def apply_freq_filter(img, r1, r2 = None, high=False,
                        reject=False, t=60):
     
     fourier = cv2.dft(np.float32(img),
