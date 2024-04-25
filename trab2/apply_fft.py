@@ -31,7 +31,7 @@ apenas o filtro passa-alta OU os filtro passa-faixa e rejeita faixa, o argumento
 -alta será alterado para 'False'.")
     args.passa_alta = False
 if args.passa_alta and args.rejeita_faixa:
-    if args.r2 is not None:
+    if args.r2 is None:
         print("Ambos os argumentos --passa-alta e --rejeita-faixa foram utilizados, \
               como o argumento r2 não foi utilizado, o argumento --rejeita-faixa \
               será configurado para 'False'.")
@@ -41,8 +41,9 @@ if args.passa_alta and args.rejeita_faixa:
               como o argumento r2 foi utilizado, o argumento --passa-alta \
               será configurado para 'False'.")
         args.passa_alta = False
-assert args.rejeita_faixa and args.r2 is not None, "Caso deseje utilizar o filtro rejeita \
-faixa, o argumento r2 deve ser utilizado."
+if args.rejeita_faixa:
+    assert args.rejeita_faixa and args.r2 is not None, "Caso deseje utilizar o filtro rejeita \
+    faixa, o argumento r2 deve ser utilizado."
 
 if args.r2 is not None:
         assert args.r2 > args.r1, "r2 deve ser maior que r1."
