@@ -58,7 +58,7 @@ filtered, mag, core, compressed = apply_freq_filter(img, args.r1, args.r2,
 filter_type = "passa_alta" if args.passa_alta else "passa_baixa"
 if args.r2 is not None: filter_type = "passa_faixa"
 if args.r2 is not None and args.rejeita_faixa: filter_type = "rejeita_faixa"
-radius = f"r1={args.r1}" if args.r2 is None else f"r1={args.r1}-r2{args.r2}"
+radius = f"r1={args.r1}" if args.r2 is None else f"r1={args.r1}-r2={args.r2}"
 file_path = f"{img_path.split('/')[-1].split('.png')[0]}-{filter_type}-{radius}"
 
 if not os.path.exists("resultados"):
